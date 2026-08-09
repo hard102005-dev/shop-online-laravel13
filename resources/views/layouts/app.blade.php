@@ -11,7 +11,17 @@
     <style>
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f4f7fb;
+            color: #0f172a;
+        }
+
+        .navbar-dark {
+            background: linear-gradient(135deg, #111827 0%, #1d4ed8 100%);
+        }
+
+        .navbar-brand {
+            font-size: 1.15rem;
+            letter-spacing: 0.02em;
         }
 
         .product-card {
@@ -22,15 +32,27 @@
             transform: translateY(-4px);
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
         }
+
+        .card-elevated {
+            border: 0;
+            border-radius: 1rem;
+            box-shadow: 0 0.75rem 2rem rgba(15, 23, 42, 0.08);
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%);
+            color: #fff;
+        }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="{{ route('home') }}">
-                <i class="bi bi-bag-check-fill me-2"></i>{{ config('app.name', 'ShopOnline') }}
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ route('home') }}">
+                <i class="bi bi-bag-check-fill fs-4"></i>
+                <span>ShopOnline</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
@@ -44,38 +66,51 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('cart.*') ? 'active' : '' }}" href="{{ route('cart.index') }}">
                             Cart
-                            <span class="badge bg-primary-subtle text-primary ms-1">
+                            <span class="badge bg-light text-primary ms-1">
                                 {{ collect(session('cart', []))->sum('quantity') }}
                             </span>
                         </a>
                     </li>
                 </ul>
 
+                <form class="d-flex my-2 my-lg-0 me-lg-3" action="{{ route('products.index') }}" method="GET">
+                    <input class="form-control" type="search" name="search" placeholder="Search products" value="{{ request('search') }}">
+                    <button class="btn btn-outline-light ms-2" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+
                 <div class="d-flex align-items-center gap-2">
                     @guest
                         <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">
                             <i class="bi bi-box-arrow-in-right me-1"></i>Login
                         </a>
-                        <a href="{{ route('register') }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('register') }}" class="btn btn-light btn-sm text-primary">
                             <i class="bi bi-person-plus me-1"></i>Register
                         </a>
                     @else
                         @if (auth()->user()->role === 'admin')
                             <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-light btn-sm">
-                                <i class="bi bi-speedometer2 me-1"></i>Admin Dashboard
+                                <i class="bi bi-speedometer2 me-1"></i>Admin
+                            </a>
+                        @else
+                            <a href="{{ route('dashboard') }}" class="btn btn-outline-light btn-sm">
+                                <i class="bi bi-columns-gap me-1"></i>Dashboard
                             </a>
                         @endif
                         <div class="dropdown">
-                            <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle me-1"></i>{{ auth()->user()->name }}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('orders.index') }}">Orders</a>
-                                </li>
+                                @if (auth()->user()->role !== 'admin')
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('orders.index') }}">Orders</a>
+                                    </li>
+                                @endif
                                 <li>
                                     <a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a>
                                 </li>
@@ -120,7 +155,17 @@
                 </div>
             @endif
 
-            @yield('content')
+            @if (isset($header))
+                <div class="mb-4">
+                    {{ $header }}
+                </div>
+            @endif
+
+            @if (isset($slot))
+                {{ $slot }}
+            @else
+                @yield('content')
+            @endif
         </div>
     </main>
 

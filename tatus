@@ -1,0 +1,36 @@
+[1mdiff --git a/resources/views/layouts/app.blade.php b/resources/views/layouts/app.blade.php[m
+[1mindex 347afdd..31950b3 100644[m
+[1m--- a/resources/views/layouts/app.blade.php[m
+[1m+++ b/resources/views/layouts/app.blade.php[m
+[36m@@ -120,7 +120,17 @@[m
+                 </div>[m
+             @endif[m
+ [m
+[31m-            @yield('content')[m
+[32m+[m[32m            @if (isset($header))[m
+[32m+[m[32m                <div class="mb-4">[m
+[32m+[m[32m                    {{ $header }}[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m            @endif[m
+[32m+[m
+[32m+[m[32m            @if (isset($slot))[m
+[32m+[m[32m                {{ $slot }}[m
+[32m+[m[32m            @else[m
+[32m+[m[32m                @yield('content')[m
+[32m+[m[32m            @endif[m
+         </div>[m
+     </main>[m
+ [m
+[1mdiff --git a/routes/web.php b/routes/web.php[m
+[1mindex 6516de7..aa24759 100644[m
+[1m--- a/routes/web.php[m
+[1m+++ b/routes/web.php[m
+[36m@@ -14,7 +14,7 @@[m
+ use App\Http\Middleware\EnsureUserIsAdmin;[m
+ use Illuminate\Support\Facades\Route;[m
+ [m
+[31m-Route::get('/', [ProductController::class, 'index'])->name('home');[m
+[32m+[m[32mRoute::view('/', 'welcome')->name('home');[m
+ Route::get('/products', [ProductController::class, 'index'])->name('products.index');[m
+ Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');[m
+ [m
