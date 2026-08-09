@@ -17,6 +17,9 @@ final class NavigationTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
+        $response->assertSee('data-bs-toggle="collapse"', false);
+        $response->assertSee('data-bs-target="#navbarContent"', false);
+        $response->assertSee('id="navbarContent"', false);
         $response->assertSee('href="' . route('home') . '"', false);
         $response->assertSee('href="' . route('products.index') . '"', false);
         $response->assertSee('href="' . route('login') . '"', false);

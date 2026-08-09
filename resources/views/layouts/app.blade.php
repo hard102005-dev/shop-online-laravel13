@@ -24,6 +24,12 @@
             letter-spacing: 0.02em;
         }
 
+        .navbar-toggler {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .product-card {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
@@ -46,7 +52,7 @@
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
+    <nav class="navbar navbar-dark sticky-top shadow-sm">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ route('home') }}">
                 <i class="bi bi-bag-check-fill fs-4"></i>
@@ -189,6 +195,28 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggle = document.querySelector('.navbar-toggler');
+            const collapse = document.getElementById('navbarContent');
+
+            if (!toggle || !collapse) {
+                return;
+            }
+
+            if (window.bootstrap && window.bootstrap.Collapse) {
+                return;
+            }
+
+            toggle.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+                toggle.setAttribute('aria-expanded', String(!isExpanded));
+                collapse.classList.toggle('show', !isExpanded);
+            });
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>
