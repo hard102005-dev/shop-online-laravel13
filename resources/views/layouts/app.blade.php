@@ -71,6 +71,19 @@
                             </span>
                         </a>
                     </li>
+                    @auth
+                        @if (!auth()->user()->isAdmin())
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('orders.*') ? 'active' : '' }}" href="{{ route('orders.index') }}">My Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}" href="{{ route('profile.edit') }}">Account Settings</a>
+                            </li>
+                        @endif
+                    @endauth
                 </ul>
 
                 <form class="d-flex my-2 my-lg-0 me-lg-3" action="{{ route('products.index') }}" method="GET">
@@ -108,12 +121,12 @@
                                         <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('orders.index') }}">Orders</a>
+                                        <a class="dropdown-item" href="{{ route('orders.index') }}">My Orders</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('profile.edit') }}">Account Settings</a>
                                     </li>
                                 @endif
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a>
-                                </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}" class="m-0">
