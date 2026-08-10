@@ -17,9 +17,11 @@ final class NavigationTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
+        $response->assertSee('navbar-expand-lg', false);
         $response->assertSee('data-bs-toggle="collapse"', false);
         $response->assertSee('data-bs-target="#navbarContent"', false);
         $response->assertSee('id="navbarContent"', false);
+        $response->assertSee('class="navbar-toggler border-0"', false);
         $response->assertSee('href="' . route('home') . '"', false);
         $response->assertSee('href="' . route('products.index') . '"', false);
         $response->assertSee('href="' . route('login') . '"', false);
@@ -33,9 +35,14 @@ final class NavigationTest extends TestCase
         $response = $this->actingAs($user)->get('/dashboard');
 
         $response->assertStatus(200);
+        $response->assertSee('href="' . route('home') . '"', false);
+        $response->assertSee('href="' . route('products.index') . '"', false);
+        $response->assertSee('href="' . route('cart.index') . '"', false);
         $response->assertSee('href="' . route('orders.index') . '">My Orders', false);
         $response->assertSee('href="' . route('dashboard') . '">Dashboard', false);
         $response->assertSee('href="' . route('profile.edit') . '">Account Settings', false);
         $response->assertSee('action="' . route('logout') . '"', false);
+        $response->assertSee('method="POST"', false);
+        $response->assertSee('name="_token"', false);
     }
 }

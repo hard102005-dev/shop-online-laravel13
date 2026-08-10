@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Bootstrap navbar collapse should not be hidden by Tailwind's .collapse utility. */
+.navbar .navbar-collapse.collapse {
+    visibility: visible;
+}

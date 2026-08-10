@@ -30,6 +30,11 @@
             justify-content: center;
         }
 
+        /* Bootstrap collapse utility should remain visible when shown. */
+        .navbar .navbar-collapse.collapse {
+            visibility: visible !important;
+        }
+
         .product-card {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
